@@ -9,6 +9,10 @@ import { validateBody, validateQuery } from '../../core/middleware/validate.js';
 import { sendSuccess, sendCreated, sendNoContent } from '../../core/helpers/response.js';
 import * as accountsService from './accounts.service.js';
 import * as activitiesService from '../activities/activities.service.js';
+import {
+  getAccountHealthHandler,
+  getHealthHistoryHandler,
+} from '../health/health.routes.js';
 
 const router = Router();
 
@@ -82,5 +86,8 @@ router.get('/:id/timeline', async (req, res, next) => {
     next(err);
   }
 });
+
+router.get('/:id/health', getAccountHealthHandler);
+router.get('/:id/health/history', getHealthHistoryHandler);
 
 export const accountRoutes = router;

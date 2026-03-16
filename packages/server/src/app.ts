@@ -13,6 +13,8 @@ import { userRoutes } from './modules/auth/users.routes.js';
 import { accountRoutes } from './modules/accounts/accounts.routes.js';
 import { accountContactsRouter, contactsRouter } from './modules/contacts/contacts.routes.js';
 import { activityRoutes } from './modules/activities/activities.routes.js';
+import { healthConfigRouter } from './modules/health/health.routes.js';
+import { alertsRouter } from './modules/alerts/alerts.routes.js';
 
 export function createApp() {
   const app = express();
@@ -24,8 +26,10 @@ export function createApp() {
   app.use(cookieParser());
   app.use(pinoHttp({ logger }));
 
-  // Health check (no auth)
-  app.get('/api/health', async (_req, res) => {
+  app.use('/api/health', healthConfigRouter);
+
+  // System health check (no auth)
+  app.get('/api/health-check', async (_req, res) => {
     let dbStatus = 'disconnected';
     let redisStatus = 'disconnected';
     try { await db.raw('SELECT 1'); dbStatus = 'connected'; } catch {}
@@ -39,6 +43,7 @@ export function createApp() {
   app.use('/api/accounts/:id/contacts', accountContactsRouter);
   app.use('/api/contacts', contactsRouter);
   app.use('/api/activities', activityRoutes);
+  app.use('/api/alerts', alertsRouter);
 
   // Error handler (must be last)
   app.use(errorHandler);
