@@ -1,6 +1,8 @@
 import { db } from '../../core/database/connection.js';
 import { NotFoundError, ForbiddenError } from '../../core/helpers/errors.js';
 import { getAccountById } from '../accounts/accounts.queries.js';
+import { healthQueue } from '../../core/queue/health-queue.js';
+import { publishSocketEvent } from '../../core/websocket/socket.js';
 import {
   listActivities as queryListActivities,
   getAccountTimeline,
@@ -57,8 +59,11 @@ export async function createActivity(
     });
   }
 
-  // TODO: publish health recalculation job via healthQueue (Task 13)
-  // TODO: publishSocketEvent('activity:created', { accountId: activity.account_id, activity }) (Task 13)
+  // Queue health score recalculation for the account
+  await healthQueue.add('calculateAccountHealth', { accountId: activity.account_id });
+
+  // Notify connected clients of the new activity
+  await publishSocketEvent('activity:created', { accountId: activity.account_id, activity });
 
   return activity;
 }
