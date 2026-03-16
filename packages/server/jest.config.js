@@ -4,6 +4,7 @@ module.exports = {
   roots: ['<rootDir>/src'],
   testMatch: ['**/*.test.ts'],
   moduleNameMapper: {
-    '^@blackbear/shared$': '<rootDir>/../shared/src'
+    '^@blackbear/shared$': '<rootDir>/../shared/src',
+    '^(\\.{1,2}/.*)\\.js$': '$1'
   }
 };
