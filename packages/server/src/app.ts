@@ -8,6 +8,8 @@ import { logger } from './core/logger.js';
 import { errorHandler } from './core/middleware/error-handler.js';
 import { db } from './core/database/connection.js';
 import { redis } from './core/queue/setup.js';
+import { authRoutes } from './modules/auth/auth.routes.js';
+import { userRoutes } from './modules/auth/users.routes.js';
 
 export function createApp() {
   const app = express();
@@ -28,7 +30,8 @@ export function createApp() {
     res.json({ status: 'ok', uptime: process.uptime(), database: dbStatus, redis: redisStatus });
   });
 
-  // Routes will be mounted here as modules are built
+  app.use('/api/auth', authRoutes);
+  app.use('/api/users', userRoutes);
 
   // Error handler (must be last)
   app.use(errorHandler);
