@@ -11,6 +11,7 @@ import { redis } from './core/queue/setup.js';
 import { authRoutes } from './modules/auth/auth.routes.js';
 import { userRoutes } from './modules/auth/users.routes.js';
 import { accountRoutes } from './modules/accounts/accounts.routes.js';
+import { accountContactsRouter, contactsRouter } from './modules/contacts/contacts.routes.js';
 
 export function createApp() {
   const app = express();
@@ -34,6 +35,8 @@ export function createApp() {
   app.use('/api/auth', authRoutes);
   app.use('/api/users', userRoutes);
   app.use('/api/accounts', accountRoutes);
+  app.use('/api/accounts/:id/contacts', accountContactsRouter);
+  app.use('/api/contacts', contactsRouter);
 
   // Error handler (must be last)
   app.use(errorHandler);
