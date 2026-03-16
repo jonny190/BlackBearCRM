@@ -8,6 +8,7 @@ import { authenticate } from '../../core/middleware/auth.js';
 import { validateBody, validateQuery } from '../../core/middleware/validate.js';
 import { sendSuccess, sendCreated, sendNoContent } from '../../core/helpers/response.js';
 import * as accountsService from './accounts.service.js';
+import * as activitiesService from '../activities/activities.service.js';
 
 const router = Router();
 
@@ -62,6 +63,21 @@ router.delete('/:id', async (req, res, next) => {
   try {
     await accountsService.deleteAccount(req.params.id, req.user!.role);
     sendNoContent(res);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/:id/timeline', async (req, res, next) => {
+  try {
+    const limit = req.query.limit ? Number(req.query.limit) : undefined;
+    const activities = await activitiesService.getTimeline(
+      req.params.id,
+      req.user!.userId,
+      req.user!.role,
+      limit,
+    );
+    sendSuccess(res, activities);
   } catch (err) {
     next(err);
   }
