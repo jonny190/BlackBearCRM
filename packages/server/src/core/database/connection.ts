@@ -1,15 +1,9 @@
 import knex from 'knex';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import { config } from '../config.js';
 
-// __dirname equivalent for ESM-compiled output
-const __dirname_resolved = typeof __dirname !== 'undefined'
-  ? __dirname
-  : path.dirname(fileURLToPath(import.meta.url));
-
-// Point to compiled JS migrations next to this file (dist/core/database/migrations/)
-const migrationsDir = path.join(__dirname_resolved, 'migrations');
+// At runtime, __dirname points to dist/core/database/ -- migrations are compiled there too
+const migrationsDir = path.join(__dirname, 'migrations');
 
 export const db = knex({
   client: 'pg',
