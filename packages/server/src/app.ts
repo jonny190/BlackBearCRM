@@ -23,6 +23,7 @@ import { aiRoutes } from './modules/ai/ai.routes.js';
 import { generateBriefing, getBriefings } from './modules/ai/briefing.service.js';
 import { relationshipRoutes } from './modules/relationships/relationships.routes.js';
 import { reportsRoutes } from './modules/reports/reports.routes.js';
+import { integrationsRoutes } from './modules/integrations/integrations.routes.js';
 
 export function createApp() {
   const app = express();
@@ -74,15 +75,7 @@ export function createApp() {
     } catch (err) { next(err); }
   });
 
-  app.post('/api/integrations/connect', authenticate, (_req, res) => {
-    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'Integrations available in Phase 2' } });
-  });
-  app.get('/api/integrations/callback', (_req, res) => {
-    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'Integrations available in Phase 2' } });
-  });
-  app.get('/api/integrations/status', authenticate, (_req, res) => {
-    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'Integrations available in Phase 2' } });
-  });
+  app.use('/api/integrations', integrationsRoutes);
 
   // Error handler (must be last)
   app.use(errorHandler);
