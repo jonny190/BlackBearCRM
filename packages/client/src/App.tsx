@@ -12,6 +12,7 @@ import { DashboardRedirect } from './features/dashboard/DashboardRedirect';
 import { ManagerDashboard } from './features/dashboard/ManagerDashboard';
 import { TeamLeadDashboard } from './features/dashboard/TeamLeadDashboard';
 import { OperationsDashboard } from './features/dashboard/OperationsDashboard';
+import { AlertsPage } from './features/alerts/AlertsPage';
 
 // Lazy-loaded pages will be added as they are built
 function PlaceholderPage({ title }: { title: string }) {
@@ -34,7 +35,7 @@ export function App() {
                 <Route path="/dashboard/operations" element={<OperationsDashboard />} />
                 <Route path="/accounts" element={<AccountListPage />} />
                 <Route path="/accounts/:id" element={<AccountDetailPage />} />
-                <Route path="/alerts" element={<PlaceholderPage title="Alerts" />} />
+                <Route path="/alerts" element={<AlertsPage />} />
                 <Route path="/settings/*" element={<PlaceholderPage title="Settings" />} />
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
               </Route>
