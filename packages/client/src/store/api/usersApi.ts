@@ -16,16 +16,25 @@ export const usersApi = baseApi.injectEndpoints({
       invalidatesTags: (_r, _e, { id }) => [{ type: 'User', id }],
     }),
     updateProfile: build.mutation<ApiResponse<User>, Partial<User>>({
-      query: (data) => ({ url: '/users/me', method: 'PUT', body: data }),
+      query: (data) => ({ url: '/profile', method: 'PUT', body: data }),
       invalidatesTags: ['User'],
     }),
     changePassword: build.mutation<void, { current_password: string; new_password: string }>({
-      query: (body) => ({ url: '/users/me/password', method: 'PUT', body }),
+      query: (body) => ({ url: '/profile/password', method: 'PUT', body }),
+    }),
+    getProfile: build.query<{ data: User }, void>({
+      query: () => '/profile',
+      providesTags: ['User'],
+    }),
+    createUser: build.mutation<ApiResponse<User>, { email: string; password: string; first_name: string; last_name: string; role: string }>({
+      query: (body) => ({ url: '/users', method: 'POST', body }),
+      invalidatesTags: ['User'],
     }),
   }),
 });
 
 export const {
   useGetUsersQuery, useGetUserQuery, useUpdateUserMutation,
-  useUpdateProfileMutation, useChangePasswordMutation,
+  useUpdateProfileMutation, useChangePasswordMutation, useGetProfileQuery,
+  useCreateUserMutation,
 } = usersApi;
