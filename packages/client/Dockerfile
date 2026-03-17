@@ -8,6 +8,7 @@ RUN NODE_ENV=development npm ci
 COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/client packages/client
+# cache-bust: phase3
 RUN cd packages/shared && npx tsc --project tsconfig.json && cd ../..
 RUN cd packages/client && npx vite build && cd ../..
 
