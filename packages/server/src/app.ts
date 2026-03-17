@@ -15,6 +15,7 @@ import { accountContactsRouter, contactsRouter } from './modules/contacts/contac
 import { activityRoutes } from './modules/activities/activities.routes.js';
 import { healthConfigRouter } from './modules/health/health.routes.js';
 import { alertsRouter } from './modules/alerts/alerts.routes.js';
+import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 
 export function createApp() {
   const app = express();
@@ -44,6 +45,7 @@ export function createApp() {
   app.use('/api/contacts', contactsRouter);
   app.use('/api/activities', activityRoutes);
   app.use('/api/alerts', alertsRouter);
+  app.use('/api/dashboard', dashboardRoutes);
 
   // Error handler (must be last)
   app.use(errorHandler);
