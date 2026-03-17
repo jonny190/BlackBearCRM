@@ -7,6 +7,7 @@ import { useGetAccountContactsQuery } from '../../store/api/contactsApi';
 import { useGetTimelineQuery } from '../../store/api/accountsApi';
 import { HealthBadge } from './components/HealthBadge';
 import { BriefingPanel } from './components/BriefingPanel';
+import { RelationshipMap } from './components/RelationshipMap';
 import { LoadingState } from '../../components/common/LoadingState';
 
 function TabPanel({ children, value, index }: { children: React.ReactNode; value: number; index: number }) {
@@ -42,6 +43,7 @@ export function AccountDetailPage() {
           <Tab label="Timeline" />
           <Tab label="Health" />
           <Tab label="Briefings" />
+          <Tab label="Relationships" />
         </Tabs>
 
         <Box p={2}>
@@ -66,6 +68,10 @@ export function AccountDetailPage() {
 
           <TabPanel value={tab} index={4}>
             {id && <BriefingPanel accountId={id} />}
+          </TabPanel>
+
+          <TabPanel value={tab} index={5}>
+            {id && <RelationshipMap accountId={id} />}
           </TabPanel>
         </Box>
       </Paper>
