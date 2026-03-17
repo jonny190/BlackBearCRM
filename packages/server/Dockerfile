@@ -8,12 +8,7 @@ RUN NODE_ENV=development npm ci
 COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/server packages/server
-RUN cd packages/shared \
-    && ls -la src/ \
-    && cat tsconfig.json \
-    && npx tsc --project tsconfig.json --listEmittedFiles 2>&1 \
-    && ls -la dist/ || echo "NO DIST CREATED" \
-    && find . -name "*.js" -not -path "*/node_modules/*" 2>/dev/null
+RUN cd packages/shared && npx tsc --project tsconfig.json && cd ../..
 RUN cd packages/server && npx tsc --skipLibCheck && cd ../..
 
 FROM node:20-alpine
