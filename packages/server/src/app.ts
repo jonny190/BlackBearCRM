@@ -17,6 +17,7 @@ import { healthConfigRouter } from './modules/health/health.routes.js';
 import { alertsRouter } from './modules/alerts/alerts.routes.js';
 import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 import { importRoutes } from './modules/import/import.routes.js';
+import { profileRoutes } from './modules/auth/profile.routes.js';
 import { authenticate } from './core/middleware/auth.js';
 
 export function createApp() {
@@ -49,6 +50,7 @@ export function createApp() {
   app.use('/api/alerts', alertsRouter);
   app.use('/api/dashboard', dashboardRoutes);
   app.use('/api/import', importRoutes);
+  app.use('/api/profile', profileRoutes);
 
   // Phase 2/3 stubs
   app.post('/api/accounts/:id/briefing', authenticate, (_req, res) => {
