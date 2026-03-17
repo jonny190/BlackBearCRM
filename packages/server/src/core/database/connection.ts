@@ -1,10 +1,15 @@
 import knex from 'knex';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { config } from '../config.js';
 
-// In dev: runs from src/, in prod Docker: migrations are at src/core/database/migrations/
-// Use __dirname to resolve relative to compiled output, then check both locations
-const migrationsDir = path.resolve(__dirname, '..', '..', '..', 'src', 'core', 'database', 'migrations');
+// __dirname equivalent for ESM-compiled output
+const __dirname_resolved = typeof __dirname !== 'undefined'
+  ? __dirname
+  : path.dirname(fileURLToPath(import.meta.url));
+
+// Point to compiled JS migrations next to this file (dist/core/database/migrations/)
+const migrationsDir = path.join(__dirname_resolved, 'migrations');
 
 export const db = knex({
   client: 'pg',
@@ -12,6 +17,6 @@ export const db = knex({
   pool: { min: 2, max: 10 },
   migrations: {
     directory: migrationsDir,
-    extension: 'ts',
+    extension: 'js',
   },
 });
