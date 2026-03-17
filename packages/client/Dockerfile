@@ -1,5 +1,4 @@
 FROM node:20-alpine AS builder
-ENV NODE_ENV=development
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY packages/shared/package.json packages/shared/
@@ -9,7 +8,7 @@ RUN NODE_ENV=development npm ci
 COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/client packages/client
-RUN npm run build --workspace=packages/shared
+RUN cd packages/shared && npx tsc --project tsconfig.json && cd ../..
 RUN npm run build --workspace=packages/client
 
 FROM nginx:alpine
