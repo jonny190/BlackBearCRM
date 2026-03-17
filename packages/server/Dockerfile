@@ -1,5 +1,4 @@
 FROM node:20-alpine AS builder
-ENV NODE_ENV=development
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY packages/shared/package.json packages/shared/
@@ -9,9 +8,8 @@ RUN NODE_ENV=development npm ci
 COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/server packages/server
-RUN npm run build --workspace=packages/shared \
-    && ls packages/shared/dist/index.js \
-    && npm run build --workspace=packages/server
+RUN cd packages/shared && npx tsc --project tsconfig.json && ls dist/index.js && cd ../..
+RUN cd packages/server && npx tsc --skipLibCheck && cd ../..
 
 FROM node:20-alpine
 WORKDIR /app
