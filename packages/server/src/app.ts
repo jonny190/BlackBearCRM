@@ -21,6 +21,8 @@ import { profileRoutes } from './modules/auth/profile.routes.js';
 import { authenticate } from './core/middleware/auth.js';
 import { aiRoutes } from './modules/ai/ai.routes.js';
 import { generateBriefing, getBriefings } from './modules/ai/briefing.service.js';
+import { relationshipRoutes } from './modules/relationships/relationships.routes.js';
+import { reportsRoutes } from './modules/reports/reports.routes.js';
 
 export function createApp() {
   const app = express();
@@ -54,6 +56,8 @@ export function createApp() {
   app.use('/api/import', importRoutes);
   app.use('/api/profile', profileRoutes);
   app.use('/api/ai', aiRoutes);
+  app.use('/api', relationshipRoutes);
+  app.use('/api/reports', reportsRoutes);
 
   app.post('/api/accounts/:id/briefing', authenticate, async (req, res, next) => {
     try {
