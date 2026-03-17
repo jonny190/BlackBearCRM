@@ -19,6 +19,7 @@ import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 import { importRoutes } from './modules/import/import.routes.js';
 import { profileRoutes } from './modules/auth/profile.routes.js';
 import { authenticate } from './core/middleware/auth.js';
+import { aiRoutes } from './modules/ai/ai.routes.js';
 
 export function createApp() {
   const app = express();
@@ -51,14 +52,7 @@ export function createApp() {
   app.use('/api/dashboard', dashboardRoutes);
   app.use('/api/import', importRoutes);
   app.use('/api/profile', profileRoutes);
-
-  // Phase 2/3 stubs
-  app.post('/api/accounts/:id/briefing', authenticate, (_req, res) => {
-    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'AI briefings available in Phase 2' } });
-  });
-  app.get('/api/accounts/:id/briefings', authenticate, (_req, res) => {
-    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'AI briefings available in Phase 2' } });
-  });
+  app.use('/api/ai', aiRoutes);
   app.post('/api/integrations/connect', authenticate, (_req, res) => {
     res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'Integrations available in Phase 2' } });
   });
