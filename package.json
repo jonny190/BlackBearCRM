@@ -1,0 +1,15 @@
+{
+  "name": "blackbear-crm",
+  "private": true,
+  "workspaces": ["packages/*"],
+  "scripts": {
+    "dev:server": "npm run dev --workspace=packages/server",
+    "dev:client": "npm run dev --workspace=packages/client",
+    "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/server && npm run build --workspace=packages/client",
+    "test:server": "npm test --workspace=packages/server",
+    "test:client": "npm test --workspace=packages/client",
+    "migrate": "npm run migrate --workspace=packages/server",
+    "migrate:rollback": "npm run migrate:rollback --workspace=packages/server",
+    "seed:admin": "npm run seed:admin --workspace=packages/server"
+  }
+}
