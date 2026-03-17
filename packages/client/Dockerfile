@@ -9,7 +9,7 @@ COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/client packages/client
 RUN cd packages/shared && npx tsc --project tsconfig.json && cd ../..
-RUN npm run build --workspace=packages/client
+RUN cd packages/client && npx vite build && cd ../..
 
 FROM nginx:alpine
 COPY --from=builder /app/packages/client/dist /usr/share/nginx/html
