@@ -12,5 +12,6 @@ export const db = knex({
   migrations: {
     directory: migrationsDir,
     extension: 'js',
+    loadExtensions: ['.js'],
   },
 });
