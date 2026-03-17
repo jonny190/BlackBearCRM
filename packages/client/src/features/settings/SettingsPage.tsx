@@ -5,6 +5,7 @@ import { ProfileTab } from './ProfileTab';
 import { SecurityTab } from './SecurityTab';
 import { UserManagementTab } from './UserManagementTab';
 import { AiSettingsTab } from './AiSettingsTab';
+import { IntegrationsTab } from './IntegrationsTab';
 
 interface TabPanelProps {
   children: React.ReactNode;
@@ -22,6 +23,13 @@ export function SettingsPage() {
   const isAdmin = user?.role === 'admin';
   const [tab, setTab] = useState(0);
 
+  // Tab indices:
+  // 0 - Profile (everyone)
+  // 1 - Security (everyone)
+  // 2 - Integrations (everyone)
+  // 3 - User Management (admin only)
+  // 4 - AI Settings (admin only)
+
   return (
     <>
       <Typography variant="h5" mb={2}>Settings</Typography>
@@ -29,6 +37,7 @@ export function SettingsPage() {
         <Tabs value={tab} onChange={(_e, v) => setTab(v)}>
           <Tab label="Profile" />
           <Tab label="Security" />
+          <Tab label="Integrations" />
           {isAdmin && <Tab label="User Management" />}
           {isAdmin && <Tab label="AI Settings" />}
         </Tabs>
@@ -39,13 +48,16 @@ export function SettingsPage() {
       <TabPanel value={tab} index={1}>
         <SecurityTab />
       </TabPanel>
+      <TabPanel value={tab} index={2}>
+        <IntegrationsTab />
+      </TabPanel>
       {isAdmin && (
-        <TabPanel value={tab} index={2}>
+        <TabPanel value={tab} index={3}>
           <UserManagementTab />
         </TabPanel>
       )}
       {isAdmin && (
-        <TabPanel value={tab} index={3}>
+        <TabPanel value={tab} index={4}>
           <AiSettingsTab />
         </TabPanel>
       )}
