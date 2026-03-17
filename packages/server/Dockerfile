@@ -9,7 +9,11 @@ RUN NODE_ENV=development npm ci
 COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/server packages/server
-RUN npm run build --workspace=packages/shared \
+RUN ls -la node_modules/@blackbear/ \
+    && readlink node_modules/@blackbear/shared \
+    && npm run build --workspace=packages/shared \
+    && ls -la packages/shared/dist/ \
+    && ls -la node_modules/@blackbear/shared/dist/ \
     && npm run build --workspace=packages/server
 
 FROM node:20-alpine
