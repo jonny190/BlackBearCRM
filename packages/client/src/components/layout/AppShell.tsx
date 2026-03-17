@@ -5,10 +5,12 @@ import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import type { RootState } from '../../store/store';
 import { toggleSidebar } from '../../store/slices/uiSlice';
+import { useSocket } from '../../hooks/useSocket';
 
 export function AppShell() {
   const dispatch = useDispatch();
   const sidebarOpen = useSelector((state: RootState) => state.ui.sidebarOpen);
+  useSocket();
 
   return (
     <Box sx={{ display: 'flex' }}>
