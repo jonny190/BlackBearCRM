@@ -1,6 +1,6 @@
 import { getAccountById } from '../accounts/accounts.queries.js';
 import { NotFoundError } from '../../core/helpers/errors.js';
-import { calculateEngagementScore, calculateTrend, getHealthColor } from './health.calculator.js';
+import { calculateEngagementScore, calculateTrend, getHealthColor, calculateMomentumScore, calculateWeightedScore } from './health.calculator.js';
 import {
   getLatestScore,
   getScoreHistory,
@@ -11,7 +11,7 @@ import {
   updateConfig,
   getActivitiesForScoring,
 } from './health.queries.js';
-import type { HealthScore, HealthScoreConfig, HealthTrend } from '@blackbear/shared';
+import type { Activity, HealthScore, HealthScoreConfig, HealthTrend } from '@blackbear/shared';
 
 export interface AccountHealthResult {
   score: HealthScore | null;
@@ -32,16 +32,57 @@ export async function calculateAndStoreHealth(accountId: string): Promise<Health
 
   const engagementScore = calculateEngagementScore(activities, account.tier, now);
 
+  // Get previous engagement score (7 days ago) to calculate momentum
+  const previousSnapshot = await getScoreFromDaysAgo(accountId, 7);
+  const previousEngagement = previousSnapshot?.engagement_score ?? null;
+  const momentumScore = calculateMomentumScore(engagementScore, previousEngagement);
+
+  // Try to get sentiment from AI if configured (optional, fail silently)
+  let sentimentScore: number | null = null;
+  try {
+    const { getAiProvider } = await import('../ai/ai.service.js');
+    const provider = await getAiProvider();
+    if (provider && activities.length > 0) {
+      const recentText = activities
+        .slice(0, 5)
+        .map((a: Activity) => a.title || '')
+        .filter(Boolean)
+        .join('. ');
+      if (recentText) {
+        const sentiment = await provider.analyzeSentiment(recentText);
+        sentimentScore = sentiment.score;
+      }
+    }
+  } catch {
+    // AI not configured or failed -- continue without sentiment
+  }
+
+  // Load tier config for weights
+  const config = await getConfig(account.tier);
+  const weights = config
+    ? {
+        engagement: config.weight_engagement,
+        sentiment: config.weight_sentiment,
+        momentum: config.weight_momentum,
+      }
+    : { engagement: 1, sentiment: 0, momentum: 0 };
+
+  const overallScore = calculateWeightedScore(
+    { engagement: engagementScore, sentiment: sentimentScore, momentum: momentumScore },
+    weights,
+  );
+
   const scoreData: Omit<HealthScore, 'id'> = {
     account_id: accountId,
-    overall_score: engagementScore,
+    overall_score: overallScore,
     engagement_score: engagementScore,
-    sentiment_score: null,
+    sentiment_score: sentimentScore,
     renewal_score: null,
-    momentum_score: null,
+    momentum_score: momentumScore,
     factors: {
       activity_count: activities.length,
       tier: account.tier,
+      weights,
     },
     calculated_at: now.toISOString(),
   };

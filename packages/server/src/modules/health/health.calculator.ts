@@ -69,3 +69,41 @@ export function getHealthColor(score: number): 'green' | 'yellow' | 'orange' | '
   if (score >= 40) return 'orange';
   return 'red';
 }
+
+/**
+ * Calculate a momentum score by comparing current engagement to a previous
+ * snapshot. The difference is mapped from the range [-30, +30] onto [0, 100].
+ * Returns 50 (neutral) when there is no previous data.
+ */
+export function calculateMomentumScore(currentEngagement: number, previousEngagement: number | null): number {
+  if (previousEngagement === null) return 50;
+  const diff = currentEngagement - previousEngagement;
+  // Map -30..+30 diff to 0..100 scale
+  const normalized = Math.round(((diff + 30) / 60) * 100);
+  return Math.max(0, Math.min(100, normalized));
+}
+
+/**
+ * Combine sub-scores into a single weighted overall score.
+ * Sub-scores with a null value or zero weight are excluded from the
+ * calculation so they do not drag the result down.
+ */
+export function calculateWeightedScore(
+  scores: { engagement: number; sentiment: number | null; momentum: number | null },
+  weights: { engagement: number; sentiment: number; momentum: number },
+): number {
+  let totalWeight = weights.engagement;
+  let weightedSum = scores.engagement * weights.engagement;
+
+  if (scores.sentiment !== null && weights.sentiment > 0) {
+    totalWeight += weights.sentiment;
+    weightedSum += scores.sentiment * weights.sentiment;
+  }
+  if (scores.momentum !== null && weights.momentum > 0) {
+    totalWeight += weights.momentum;
+    weightedSum += scores.momentum * weights.momentum;
+  }
+
+  if (totalWeight === 0) return scores.engagement;
+  return Math.round(weightedSum / totalWeight);
+}
