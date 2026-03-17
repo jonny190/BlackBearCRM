@@ -4,6 +4,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { ProfileTab } from './ProfileTab';
 import { SecurityTab } from './SecurityTab';
 import { UserManagementTab } from './UserManagementTab';
+import { AiSettingsTab } from './AiSettingsTab';
 
 interface TabPanelProps {
   children: React.ReactNode;
@@ -29,6 +30,7 @@ export function SettingsPage() {
           <Tab label="Profile" />
           <Tab label="Security" />
           {isAdmin && <Tab label="User Management" />}
+          {isAdmin && <Tab label="AI Settings" />}
         </Tabs>
       </Box>
       <TabPanel value={tab} index={0}>
@@ -40,6 +42,11 @@ export function SettingsPage() {
       {isAdmin && (
         <TabPanel value={tab} index={2}>
           <UserManagementTab />
+        </TabPanel>
+      )}
+      {isAdmin && (
+        <TabPanel value={tab} index={3}>
+          <AiSettingsTab />
         </TabPanel>
       )}
     </>

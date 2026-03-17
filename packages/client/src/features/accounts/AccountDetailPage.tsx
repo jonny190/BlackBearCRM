@@ -6,6 +6,7 @@ import { useGetAccountHealthQuery } from '../../store/api/healthApi';
 import { useGetAccountContactsQuery } from '../../store/api/contactsApi';
 import { useGetTimelineQuery } from '../../store/api/accountsApi';
 import { HealthBadge } from './components/HealthBadge';
+import { BriefingPanel } from './components/BriefingPanel';
 import { LoadingState } from '../../components/common/LoadingState';
 
 function TabPanel({ children, value, index }: { children: React.ReactNode; value: number; index: number }) {
@@ -40,6 +41,7 @@ export function AccountDetailPage() {
           <Tab label={`Contacts (${contactsData?.data?.length ?? 0})`} />
           <Tab label="Timeline" />
           <Tab label="Health" />
+          <Tab label="Briefings" />
         </Tabs>
 
         <Box p={2}>
@@ -60,6 +62,10 @@ export function AccountDetailPage() {
           <TabPanel value={tab} index={3}>
             {/* HealthScoreCard + HealthTrendChart will be rendered here */}
             <Typography>Health Score: {health?.overall_score ?? 'N/A'}</Typography>
+          </TabPanel>
+
+          <TabPanel value={tab} index={4}>
+            {id && <BriefingPanel accountId={id} />}
           </TabPanel>
         </Box>
       </Paper>
