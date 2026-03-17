@@ -1,4 +1,5 @@
 FROM node:20-alpine AS builder
+ENV NODE_ENV=development
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY packages/shared/package.json packages/shared/
