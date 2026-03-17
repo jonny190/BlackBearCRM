@@ -14,11 +14,8 @@ import { TeamLeadDashboard } from './features/dashboard/TeamLeadDashboard';
 import { OperationsDashboard } from './features/dashboard/OperationsDashboard';
 import { AlertsPage } from './features/alerts/AlertsPage';
 import { SettingsPage } from './features/settings/SettingsPage';
-
-// Lazy-loaded pages will be added as they are built
-function PlaceholderPage({ title }: { title: string }) {
-  return <div>{title} - Coming soon</div>;
-}
+import { ReportsPage } from './features/reports/ReportsPage';
+import { ImportPage } from './features/import/ImportPage';
 
 export function App() {
   return (
@@ -37,6 +34,8 @@ export function App() {
                 <Route path="/accounts" element={<AccountListPage />} />
                 <Route path="/accounts/:id" element={<AccountDetailPage />} />
                 <Route path="/alerts" element={<AlertsPage />} />
+                <Route path="/reports" element={<ReportsPage />} />
+                <Route path="/import" element={<ImportPage />} />
                 <Route path="/settings/*" element={<SettingsPage />} />
                 <Route path="/" element={<Navigate to="/dashboard" replace />} />
               </Route>
