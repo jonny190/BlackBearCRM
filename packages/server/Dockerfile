@@ -6,6 +6,7 @@ COPY packages/shared/package.json packages/shared/
 COPY packages/server/package.json packages/server/
 COPY packages/client/package.json packages/client/
 RUN NODE_ENV=development npm ci
+COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/server packages/server
 RUN npm run build --workspace=packages/shared
