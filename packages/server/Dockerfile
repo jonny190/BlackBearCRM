@@ -18,7 +18,6 @@ COPY --from=builder /app/packages/shared/package.json packages/shared/
 COPY --from=builder /app/packages/shared/dist packages/shared/dist
 COPY --from=builder /app/packages/server/package.json packages/server/
 COPY --from=builder /app/packages/server/dist packages/server/dist
-COPY --from=builder /app/packages/server/src/core/database/migrations packages/server/src/core/database/migrations
 COPY --from=builder /app/packages/client/package.json packages/client/
 RUN NODE_ENV=production npm ci --omit=dev
 EXPOSE 3000
