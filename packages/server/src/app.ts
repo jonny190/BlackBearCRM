@@ -16,6 +16,7 @@ import { activityRoutes } from './modules/activities/activities.routes.js';
 import { healthConfigRouter } from './modules/health/health.routes.js';
 import { alertsRouter } from './modules/alerts/alerts.routes.js';
 import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
+import { importRoutes } from './modules/import/import.routes.js';
 
 export function createApp() {
   const app = express();
@@ -46,6 +47,7 @@ export function createApp() {
   app.use('/api/activities', activityRoutes);
   app.use('/api/alerts', alertsRouter);
   app.use('/api/dashboard', dashboardRoutes);
+  app.use('/api/import', importRoutes);
 
   // Error handler (must be last)
   app.use(errorHandler);
