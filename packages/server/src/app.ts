@@ -17,6 +17,7 @@ import { healthConfigRouter } from './modules/health/health.routes.js';
 import { alertsRouter } from './modules/alerts/alerts.routes.js';
 import { dashboardRoutes } from './modules/dashboard/dashboard.routes.js';
 import { importRoutes } from './modules/import/import.routes.js';
+import { authenticate } from './core/middleware/auth.js';
 
 export function createApp() {
   const app = express();
@@ -48,6 +49,23 @@ export function createApp() {
   app.use('/api/alerts', alertsRouter);
   app.use('/api/dashboard', dashboardRoutes);
   app.use('/api/import', importRoutes);
+
+  // Phase 2/3 stubs
+  app.post('/api/accounts/:id/briefing', authenticate, (_req, res) => {
+    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'AI briefings available in Phase 2' } });
+  });
+  app.get('/api/accounts/:id/briefings', authenticate, (_req, res) => {
+    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'AI briefings available in Phase 2' } });
+  });
+  app.post('/api/integrations/connect', authenticate, (_req, res) => {
+    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'Integrations available in Phase 2' } });
+  });
+  app.get('/api/integrations/callback', (_req, res) => {
+    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'Integrations available in Phase 2' } });
+  });
+  app.get('/api/integrations/status', authenticate, (_req, res) => {
+    res.status(501).json({ error: { code: 'NOT_IMPLEMENTED', message: 'Integrations available in Phase 2' } });
+  });
 
   // Error handler (must be last)
   app.use(errorHandler);
