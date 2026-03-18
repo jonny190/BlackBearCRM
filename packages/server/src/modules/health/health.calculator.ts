@@ -2,8 +2,8 @@ import {
   ACTIVITY_POINTS,
   TIER_TARGET_POINTS,
   RECENCY_DECAY,
-} from '@blackbear/shared';
-import type { Activity, HealthTrend } from '@blackbear/shared';
+} from '@blackpear/shared';
+import type { Activity, HealthTrend } from '@blackpear/shared';
 
 /**
  * Calculate an engagement score for an account based on recent activity.

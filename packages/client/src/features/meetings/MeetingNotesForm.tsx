@@ -2,9 +2,9 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, F
 import { Add, Close } from '@mui/icons-material';
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { createMeetingNoteSchema } from '@blackbear/shared';
+import { createMeetingNoteSchema } from '@blackpear/shared';
 import { useState } from 'react';
-import type { Contact } from '@blackbear/shared';
+import type { Contact } from '@blackpear/shared';
 
 interface Props {
   open: boolean;

@@ -9,7 +9,7 @@ import {
   insertProcessedNotes,
   deleteProcessedNotes,
 } from './meetings.queries.js';
-import type { ProcessedNoteType } from '@blackbear/shared';
+import type { ProcessedNoteType } from '@blackpear/shared';
 
 interface ExtractedNote {
   type: ProcessedNoteType;

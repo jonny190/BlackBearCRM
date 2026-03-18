@@ -1,5 +1,5 @@
 import { db } from '../../core/database/connection.js';
-import type { HealthScore, HealthScoreConfig, Activity } from '@blackbear/shared';
+import type { HealthScore, HealthScoreConfig, Activity } from '@blackpear/shared';
 
 // ---------------------------------------------------------------------------
 // Health score queries

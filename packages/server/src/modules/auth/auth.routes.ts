@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { loginSchema } from '@blackbear/shared';
+import { loginSchema } from '@blackpear/shared';
 import { validateBody } from '../../core/middleware/validate.js';
 import { authenticate } from '../../core/middleware/auth.js';
 import { authLimiter } from '../../core/middleware/rate-limit.js';

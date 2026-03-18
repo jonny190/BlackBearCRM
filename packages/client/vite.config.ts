@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      '@blackbear/shared': path.resolve(__dirname, '../shared/src/index.ts'),
+      '@blackpear/shared': path.resolve(__dirname, '../shared/src/index.ts'),
     },
   },
   server: {

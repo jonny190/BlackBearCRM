@@ -9,7 +9,7 @@ import {
   deleteContact as queryDeleteContact,
   type ContactListParams,
 } from './contacts.queries.js';
-import type { Contact } from '@blackbear/shared';
+import type { Contact } from '@blackpear/shared';
 
 async function checkAccountAccess(accountId: string, userId: string, role: string) {
   const account = await getAccountById(accountId);

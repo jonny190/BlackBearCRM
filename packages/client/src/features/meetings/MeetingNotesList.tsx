@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Chip, Button, Box, Collapse } from '@mui/material';
 import { Edit, Delete, Add, Refresh, ExpandMore, ExpandLess } from '@mui/icons-material';
 import { ProcessedInsights } from './ProcessedInsights';
-import type { MeetingNote, MeetingNoteStatus } from '@blackbear/shared';
+import type { MeetingNote, MeetingNoteStatus } from '@blackpear/shared';
 
 const STATUS_CONFIG: Record<MeetingNoteStatus, { label: string; color: 'default' | 'info' | 'success' | 'error' }> = {
   processing: { label: 'Processing', color: 'info' },

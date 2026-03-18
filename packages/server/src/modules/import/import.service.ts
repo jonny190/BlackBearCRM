@@ -1,5 +1,5 @@
 import { parse } from 'csv-parse/sync';
-import { createAccountSchema, createContactSchema } from '@blackbear/shared';
+import { createAccountSchema, createContactSchema } from '@blackpear/shared';
 import { db } from '../../core/database/connection.js';
 import { logger } from '../../core/logger.js';
 

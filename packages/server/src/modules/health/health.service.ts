@@ -11,7 +11,7 @@ import {
   updateConfig,
   getActivitiesForScoring,
 } from './health.queries.js';
-import type { Activity, HealthScore, HealthScoreConfig, HealthTrend } from '@blackbear/shared';
+import type { Activity, HealthScore, HealthScoreConfig, HealthTrend } from '@blackpear/shared';
 
 export interface AccountHealthResult {
   score: HealthScore | null;

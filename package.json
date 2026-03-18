@@ -1,5 +1,5 @@
 {
-  "name": "blackbear-crm",
+  "name": "blackpear-crm",
   "private": true,
   "workspaces": ["packages/*"],
   "scripts": {

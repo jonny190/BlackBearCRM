@@ -9,8 +9,8 @@ import {
   AccountStatus,
   ACTIVITY_GAP_DAYS,
   RoleLevel,
-} from '@blackbear/shared';
-import type { Account, Alert } from '@blackbear/shared';
+} from '@blackpear/shared';
+import type { Account, Alert } from '@blackpear/shared';
 
 // ---------------------------------------------------------------------------
 // Helpers

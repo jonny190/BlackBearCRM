@@ -1,5 +1,5 @@
 import { Router, Request } from 'express';
-import { createMeetingNoteSchema, updateMeetingNoteSchema, meetingNoteQuerySchema } from '@blackbear/shared';
+import { createMeetingNoteSchema, updateMeetingNoteSchema, meetingNoteQuerySchema } from '@blackpear/shared';
 import { authenticate } from '../../core/middleware/auth.js';
 import { validateBody, validateQuery } from '../../core/middleware/validate.js';
 import { sendSuccess, sendCreated, sendNoContent } from '../../core/helpers/response.js';

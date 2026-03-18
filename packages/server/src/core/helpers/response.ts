@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import type { PaginationMeta } from '@blackbear/shared';
+import type { PaginationMeta } from '@blackpear/shared';
 
 export function sendSuccess<T>(res: Response, data: T, meta?: PaginationMeta, status = 200) {
   const body: { data: T; meta?: PaginationMeta } = { data };

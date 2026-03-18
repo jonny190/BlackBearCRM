@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import type { User, ApiResponse, PaginationMeta } from '@blackbear/shared';
+import type { User, ApiResponse, PaginationMeta } from '@blackpear/shared';
 
 export const usersApi = baseApi.injectEndpoints({
   endpoints: (build) => ({

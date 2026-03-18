@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import type { MeetingNote, ProcessedCustomerNote, ApiResponse, PaginationMeta } from '@blackbear/shared';
+import type { MeetingNote, ProcessedCustomerNote, ApiResponse, PaginationMeta } from '@blackpear/shared';
 
 export const meetingsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({

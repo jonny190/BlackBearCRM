@@ -3,7 +3,7 @@ import {
   createContactSchema,
   updateContactSchema,
   contactQuerySchema,
-} from '@blackbear/shared';
+} from '@blackpear/shared';
 import { authenticate } from '../../core/middleware/auth.js';
 import { validateBody, validateQuery } from '../../core/middleware/validate.js';
 import { sendSuccess, sendCreated, sendNoContent } from '../../core/helpers/response.js';

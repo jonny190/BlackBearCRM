@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createUserSchema, updateUserSchema } from '@blackbear/shared';
+import { createUserSchema, updateUserSchema } from '@blackpear/shared';
 import { authenticate } from '../../core/middleware/auth.js';
 import { requireAdmin } from '../../core/middleware/rbac.js';
 import { validateBody } from '../../core/middleware/validate.js';

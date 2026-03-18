@@ -1,6 +1,6 @@
 import { Box, Chip, Typography, CircularProgress, Card, CardContent } from '@mui/material';
 import { useGetMeetingNoteInsightsQuery } from '../../store/api/meetingsApi';
-import type { MeetingNoteStatus, ProcessedNoteType } from '@blackbear/shared';
+import type { MeetingNoteStatus, ProcessedNoteType } from '@blackpear/shared';
 
 const TYPE_CONFIG: Record<ProcessedNoteType, { label: string; color: 'primary' | 'error' | 'success' | 'warning' | 'secondary' }> = {
   action_item: { label: 'Action Item', color: 'primary' },

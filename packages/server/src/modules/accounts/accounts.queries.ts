@@ -1,5 +1,5 @@
 import { db } from '../../core/database/connection.js';
-import type { Account } from '@blackbear/shared';
+import type { Account } from '@blackpear/shared';
 
 export interface AccountListParams {
   q?: string;

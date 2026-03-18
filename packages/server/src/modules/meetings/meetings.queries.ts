@@ -1,5 +1,5 @@
 import { db } from '../../core/database/connection.js';
-import type { MeetingNote, ProcessedCustomerNote } from '@blackbear/shared';
+import type { MeetingNote, ProcessedCustomerNote } from '@blackpear/shared';
 
 export interface MeetingNoteListParams {
   ownerFilter?: string;

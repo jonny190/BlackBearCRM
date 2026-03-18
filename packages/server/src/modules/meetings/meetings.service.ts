@@ -12,7 +12,7 @@ import {
   deleteProcessedNotes,
   type MeetingNoteListParams,
 } from './meetings.queries.js';
-import type { MeetingNote } from '@blackbear/shared';
+import type { MeetingNote } from '@blackpear/shared';
 
 async function checkAccountAccess(accountId: string, userId: string, role: string) {
   const account = await getAccountById(accountId);

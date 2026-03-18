@@ -7,7 +7,7 @@ import {
   deleteAccount as queryDeleteAccount,
   type AccountListParams,
 } from './accounts.queries.js';
-import type { Account } from '@blackbear/shared';
+import type { Account } from '@blackpear/shared';
 
 export async function listAccounts(params: AccountListParams, userId: string, role: string) {
   if (role === 'manager') {

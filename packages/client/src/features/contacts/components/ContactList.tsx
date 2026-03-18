@@ -1,6 +1,6 @@
 import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Chip, Button, Box } from '@mui/material';
 import { Edit, Delete, Add } from '@mui/icons-material';
-import type { Contact } from '@blackbear/shared';
+import type { Contact } from '@blackpear/shared';
 
 interface Props {
   contacts: Contact[];

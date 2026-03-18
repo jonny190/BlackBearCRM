@@ -1,5 +1,5 @@
 import { db } from '../../core/database/connection.js';
-import type { Alert } from '@blackbear/shared';
+import type { Alert } from '@blackpear/shared';
 
 export async function listAlertsByUser(userId: string): Promise<Alert[]> {
   const rows = await db('alerts')

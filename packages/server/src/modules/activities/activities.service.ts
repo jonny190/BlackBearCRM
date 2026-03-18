@@ -12,7 +12,7 @@ import {
   deleteActivity as queryDeleteActivity,
   type ActivityListParams,
 } from './activities.queries.js';
-import type { Activity } from '@blackbear/shared';
+import type { Activity } from '@blackpear/shared';
 
 async function checkAccountAccess(accountId: string, userId: string, role: string) {
   const account = await getAccountById(accountId);

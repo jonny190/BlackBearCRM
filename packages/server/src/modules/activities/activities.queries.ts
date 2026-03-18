@@ -1,5 +1,5 @@
 import { db } from '../../core/database/connection.js';
-import type { Activity } from '@blackbear/shared';
+import type { Activity } from '@blackpear/shared';
 
 export interface ActivityListParams {
   account_id?: string;

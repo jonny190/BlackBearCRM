@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import type { Activity, ApiResponse, PaginationMeta } from '@blackbear/shared';
+import type { Activity, ApiResponse, PaginationMeta } from '@blackpear/shared';
 
 export const activitiesApi = baseApi.injectEndpoints({
   endpoints: (build) => ({

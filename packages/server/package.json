@@ -1,5 +1,5 @@
 {
-  "name": "@blackbear/server",
+  "name": "@blackpear/server",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -15,7 +15,7 @@
     "seed:admin": "tsx src/scripts/seed-admin.ts"
   },
   "dependencies": {
-    "@blackbear/shared": "*",
+    "@blackpear/shared": "*",
     "express": "^4.18.0",
     "cors": "^2.8.5",
     "helmet": "^7.1.0",

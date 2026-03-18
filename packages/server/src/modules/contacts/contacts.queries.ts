@@ -1,5 +1,5 @@
 import { db } from '../../core/database/connection.js';
-import type { Contact } from '@blackbear/shared';
+import type { Contact } from '@blackpear/shared';
 
 export interface ContactListParams {
   q?: string;

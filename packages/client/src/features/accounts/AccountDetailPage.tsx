@@ -32,8 +32,8 @@ import {
   useDeleteMeetingNoteMutation,
   useProcessMeetingNoteMutation,
 } from '../../store/api/meetingsApi';
-import type { Contact } from '@blackbear/shared';
-import type { MeetingNote } from '@blackbear/shared';
+import type { Contact } from '@blackpear/shared';
+import type { MeetingNote } from '@blackpear/shared';
 
 function TabPanel({ children, value, index }: { children: React.ReactNode; value: number; index: number }) {
   return value === index ? <Box py={2}>{children}</Box> : null;

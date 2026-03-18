@@ -1,5 +1,5 @@
 import { baseApi } from './baseApi';
-import type { Contact, ApiResponse, PaginationMeta } from '@blackbear/shared';
+import type { Contact, ApiResponse, PaginationMeta } from '@blackpear/shared';
 
 export const contactsApi = baseApi.injectEndpoints({
   endpoints: (build) => ({

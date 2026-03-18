@@ -1,6 +1,6 @@
 import { calculateEngagementScore, calculateTrend, getHealthColor } from './health.calculator.js';
-import type { Activity } from '@blackbear/shared';
-import { ActivityType, AccountTier } from '@blackbear/shared';
+import type { Activity } from '@blackpear/shared';
+import { ActivityType, AccountTier } from '@blackpear/shared';
 
 // Fixed reference date for deterministic tests
 const NOW = new Date('2026-03-16T12:00:00Z');

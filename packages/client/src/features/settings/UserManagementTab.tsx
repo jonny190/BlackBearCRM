@@ -25,7 +25,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { PersonAdd, ToggleOn, ToggleOff } from '@mui/icons-material';
-import type { User } from '@blackbear/shared';
+import type { User } from '@blackpear/shared';
 import { useGetUsersQuery, useUpdateUserMutation, useCreateUserMutation } from '../../store/api/usersApi';
 import { LoadingState } from '../../components/common/LoadingState';
 
