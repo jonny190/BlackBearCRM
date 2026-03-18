@@ -30,6 +30,14 @@ export function useSocket() {
       dispatch(baseApi.util.invalidateTags(['Activity', 'Dashboard']));
     });
 
+    socket.on('meeting-note:processed', ({ accountId }: { accountId: string }) => {
+      dispatch(baseApi.util.invalidateTags(['MeetingNote', 'Insight', { type: 'Health', id: accountId }]));
+    });
+
+    socket.on('meeting-note:created', () => {
+      dispatch(baseApi.util.invalidateTags(['MeetingNote']));
+    });
+
     socketRef.current = socket;
 
     return () => { socket.disconnect(); };
