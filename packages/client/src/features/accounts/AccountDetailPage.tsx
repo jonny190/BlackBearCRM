@@ -23,7 +23,17 @@ import { ActivityForm } from '../activities/components/ActivityForm';
 import { HealthScoreCard } from '../health/components/HealthScoreCard';
 import { HealthTrendChart } from '../health/components/HealthTrendChart';
 import { LoadingState } from '../../components/common/LoadingState';
+import { MeetingNotesList } from '../meetings/MeetingNotesList';
+import { MeetingNotesForm } from '../meetings/MeetingNotesForm';
+import {
+  useGetMeetingNotesQuery,
+  useCreateMeetingNoteMutation,
+  useUpdateMeetingNoteMutation,
+  useDeleteMeetingNoteMutation,
+  useProcessMeetingNoteMutation,
+} from '../../store/api/meetingsApi';
 import type { Contact } from '@blackbear/shared';
+import type { MeetingNote } from '@blackbear/shared';
 
 function TabPanel({ children, value, index }: { children: React.ReactNode; value: number; index: number }) {
   return value === index ? <Box py={2}>{children}</Box> : null;
@@ -54,18 +64,27 @@ export function AccountDetailPage() {
   // Activity dialog state
   const [activityFormOpen, setActivityFormOpen] = useState(false);
 
+  // Meeting notes dialog state
+  const [meetingFormOpen, setMeetingFormOpen] = useState(false);
+  const [editingMeeting, setEditingMeeting] = useState<MeetingNote | null>(null);
+
   // Data queries
   const { data: accountData, isLoading } = useGetAccountQuery(id!);
   const { data: healthData } = useGetAccountHealthQuery(id!);
   const { data: contactsData } = useGetAccountContactsQuery({ accountId: id! });
   const { data: timelineData } = useGetTimelineQuery(id!);
   const { data: healthHistoryData } = useGetHealthHistoryQuery(id!);
+  const { data: meetingNotesData } = useGetMeetingNotesQuery({ accountId: id! });
 
   // Mutations
   const [createContact, { isLoading: creatingContact }] = useCreateContactMutation();
   const [updateContact, { isLoading: updatingContact }] = useUpdateContactMutation();
   const [deleteContact] = useDeleteContactMutation();
   const [createActivity, { isLoading: creatingActivity }] = useCreateActivityMutation();
+  const [createMeetingNote, { isLoading: creatingMeeting }] = useCreateMeetingNoteMutation();
+  const [updateMeetingNote, { isLoading: updatingMeeting }] = useUpdateMeetingNoteMutation();
+  const [deleteMeetingNote] = useDeleteMeetingNoteMutation();
+  const [processMeetingNote] = useProcessMeetingNoteMutation();
 
   if (isLoading) return <LoadingState />;
 
@@ -73,6 +92,7 @@ export function AccountDetailPage() {
   const health = healthData?.data;
   const contacts = contactsData?.data ?? [];
   const activities = timelineData?.data ?? [];
+  const meetingNotes = meetingNotesData?.data ?? [];
   const healthHistory = healthHistoryData?.data ?? [];
 
   // Contact handlers
@@ -106,6 +126,35 @@ export function AccountDetailPage() {
     setActivityFormOpen(false);
   };
 
+  // Meeting note handlers
+  const handleAddMeeting = () => {
+    setEditingMeeting(null);
+    setMeetingFormOpen(true);
+  };
+
+  const handleEditMeeting = (note: MeetingNote) => {
+    setEditingMeeting(note);
+    setMeetingFormOpen(true);
+  };
+
+  const handleMeetingSubmit = async (data: any) => {
+    if (editingMeeting) {
+      await updateMeetingNote({ id: editingMeeting.id, data });
+    } else {
+      await createMeetingNote({ accountId: id!, data });
+    }
+    setMeetingFormOpen(false);
+    setEditingMeeting(null);
+  };
+
+  const handleDeleteMeeting = async (meetingId: string) => {
+    await deleteMeetingNote(meetingId);
+  };
+
+  const handleReprocessMeeting = async (meetingId: string) => {
+    await processMeetingNote(meetingId);
+  };
+
   return (
     <>
       <Box display="flex" alignItems="center" gap={2} mb={2}>
@@ -124,6 +173,7 @@ export function AccountDetailPage() {
           <Tab label="Health" />
           <Tab label="Briefings" />
           <Tab label="Relationships" />
+          <Tab label={`Meeting Notes (${meetingNotes.length})`} />
         </Tabs>
 
         <Box p={2}>
@@ -281,6 +331,25 @@ export function AccountDetailPage() {
           {/* Relationships Tab */}
           <TabPanel value={tab} index={5}>
             {id && <RelationshipMap accountId={id} />}
+          </TabPanel>
+
+          {/* Meeting Notes Tab */}
+          <TabPanel value={tab} index={6}>
+            <MeetingNotesList
+              notes={meetingNotes}
+              onAdd={handleAddMeeting}
+              onEdit={handleEditMeeting}
+              onDelete={handleDeleteMeeting}
+              onReprocess={handleReprocessMeeting}
+            />
+            <MeetingNotesForm
+              open={meetingFormOpen}
+              onClose={() => { setMeetingFormOpen(false); setEditingMeeting(null); }}
+              onSubmit={handleMeetingSubmit}
+              defaultValues={editingMeeting ?? undefined}
+              contacts={contacts}
+              isLoading={creatingMeeting || updatingMeeting}
+            />
           </TabPanel>
         </Box>
       </Paper>
