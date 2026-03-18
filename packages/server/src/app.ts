@@ -24,6 +24,7 @@ import { generateBriefing, getBriefings } from './modules/ai/briefing.service.js
 import { relationshipRoutes } from './modules/relationships/relationships.routes.js';
 import { reportsRoutes } from './modules/reports/reports.routes.js';
 import { integrationsRoutes } from './modules/integrations/integrations.routes.js';
+import { meetingNotesAccountRouter, meetingNotesRouter } from './modules/meetings/meetings.routes.js';
 
 export function createApp() {
   const app = express();
@@ -52,6 +53,8 @@ export function createApp() {
   app.use('/api/accounts/:id/contacts', accountContactsRouter);
   app.use('/api/contacts', contactsRouter);
   app.use('/api/activities', activityRoutes);
+  app.use('/api/accounts/:id/meeting-notes', meetingNotesAccountRouter);
+  app.use('/api/meeting-notes', meetingNotesRouter);
   app.use('/api/alerts', alertsRouter);
   app.use('/api/dashboard', dashboardRoutes);
   app.use('/api/import', importRoutes);

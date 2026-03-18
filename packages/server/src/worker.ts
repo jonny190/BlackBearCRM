@@ -1,4 +1,4 @@
-import { healthQueue, alertQueue } from './core/queue/health-queue.js';
+import { healthQueue, alertQueue, meetingsQueue } from './core/queue/health-queue.js';
 import { logger } from './core/logger.js';
 import { calculateAndStoreHealth } from './modules/health/health.service.js';
 import {
@@ -7,6 +7,7 @@ import {
   checkFollowUpDue,
 } from './modules/alerts/alerts.checker.js';
 import { db } from './core/database/connection.js';
+import { processMeetingNote } from './modules/meetings/ai-notes-processor.js';
 
 // ---------------------------------------------------------------------------
 // Health queue processors
@@ -68,6 +69,22 @@ alertQueue.process('checkFollowUpDue', async (_job) => {
   logger.info('Checking follow-up due');
   await checkFollowUpDue();
   logger.info('Follow-up due check complete');
+});
+
+// ---------------------------------------------------------------------------
+// Meeting notes queue processors
+// ---------------------------------------------------------------------------
+
+meetingsQueue.process('processMeetingNote', async (job) => {
+  const { meetingNoteId } = job.data as { meetingNoteId: string };
+  logger.info({ meetingNoteId }, 'Processing meeting note with AI');
+  try {
+    await processMeetingNote(meetingNoteId);
+    logger.info({ meetingNoteId }, 'Meeting note processed');
+  } catch (err) {
+    logger.error({ err, meetingNoteId }, 'Failed to process meeting note');
+    throw err;
+  }
 });
 
 // ---------------------------------------------------------------------------
