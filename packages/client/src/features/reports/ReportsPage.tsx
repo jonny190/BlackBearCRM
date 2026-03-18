@@ -111,7 +111,7 @@ export function ReportsPage() {
 
   // Transform activity trends - pivot by type for line chart
   const rawTrends: any[] = trendsData?.data ?? [];
-  const trendsByDay: Record<string, Record<string, number>> = {};
+  const trendsByDay: Record<string, Record<string, string | number>> = {};
   const activityTypes = new Set<string>();
   for (const row of rawTrends) {
     const day = new Date(row.day).toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
