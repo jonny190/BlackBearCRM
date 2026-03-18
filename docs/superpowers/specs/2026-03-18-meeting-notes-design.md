@@ -55,6 +55,12 @@ Indexes: `meeting_note_id`, `account_id`, `note_type`
 
 #### meetings.routes.ts
 
+Two routers exported from this file:
+
+**`meetingNotesAccountRouter`** - created with `Router({ mergeParams: true })` so `req.params.id` (the account ID) is forwarded from the parent mount. Handlers must type `req.params` as `{ id: string }`. This matches the contacts router pattern exactly.
+
+**`meetingNotesRouter`** - standard `Router()` for operations on individual meeting notes.
+
 All routes behind `authenticate` middleware.
 
 | Method | Path | Description |
@@ -71,10 +77,15 @@ Request validation via `validateBody` and `validateQuery` with Zod schemas from 
 #### meetings.service.ts
 
 - RBAC checks via `checkAccountAccess` pattern (managers can only access their owned accounts)
-- On create: save note with status `draft`, add job to meetings queue
-- On update: update note, re-queue AI processing if `raw_notes` changed
-- On manual process: delete existing processed notes, reset status to `processing`, re-queue
+- On create: save note with status `processing`, immediately add job to meetings queue
+- On update: if `raw_notes` changed, set status to `processing`, delete existing processed notes, re-queue AI processing; otherwise just update fields
+- On manual process: delete existing processed notes, set status to `processing`, re-queue
 - Publishes WebSocket events: `meeting-note:created`, `meeting-note:updated`, `meeting-note:processed`
+
+**Status state machine:**
+- `processing` - initial state on create, or when re-processing is triggered (update with changed notes, manual re-process)
+- `processed` - set by the queue worker after successful AI extraction
+- `failed` - set by the queue worker after all retries exhausted, or if AI provider is not configured
 
 #### meetings.queries.ts
 
@@ -94,7 +105,7 @@ Queue worker that processes meeting notes through AI:
 
 1. Fetches meeting note and account context (name, industry, tier)
 2. Builds structured prompt requesting JSON array of `{ type, content, confidence }`
-3. Calls `getAiProvider().generateText()` with the prompt
+3. Calls `await getAiProvider()` (async, returns `AiProvider | null`), then `provider.generateText()` with the prompt. Must handle `null` provider (AI not configured).
 4. Parses JSON response, inserts into `processed_customer_notes`
 5. Updates meeting note status to `processed`, sets `processed_at`
 6. Queues health recalculation: `healthQueue.add('calculateAccountHealth', { accountId })`
@@ -105,17 +116,29 @@ Error handling:
 - Unparseable AI response: retry up to 3 times with exponential backoff (1s, 4s, 16s)
 - All retries exhausted: status -> `failed`, user can manually re-trigger
 
-### New queue: packages/server/src/core/queue/meetings-queue.ts
+### Queue: packages/server/src/core/queue/health-queue.ts
 
-Same pattern as `health-queue.ts`:
+Add `meetingsQueue` to the existing queue file (which already exports `healthQueue` and `alertQueue`):
 ```typescript
 export const meetingsQueue = new Bull('meeting-notes-processing', config.REDIS_URL);
+```
+
+### Worker registration: packages/server/src/worker.ts
+
+Import `meetingsQueue` from `health-queue.ts` and register the processor:
+```typescript
+import { processMeetingNote } from './modules/meetings/ai-notes-processor.js';
+
+meetingsQueue.process('processMeetingNote', async (job) => {
+  const { meetingNoteId } = job.data;
+  await processMeetingNote(meetingNoteId);
+});
 ```
 
 ### Registration in app.ts
 
 Two route mounts:
-- `app.use('/api/accounts/:id/meeting-notes', meetingNotesAccountRouter)` - account-scoped routes
+- `app.use('/api/accounts/:id/meeting-notes', meetingNotesAccountRouter)` - account-scoped routes (uses `mergeParams`)
 - `app.use('/api/meeting-notes', meetingNotesRouter)` - individual note operations
 
 ## Shared Package
@@ -152,9 +175,9 @@ export interface ProcessedCustomerNote {
 ### packages/shared/src/validation/meeting-note.ts
 
 Zod schemas following the activity validation pattern:
-- `createMeetingNoteSchema` - requires title, raw_notes, meeting_date; optional contact_id, participants
+- `createMeetingNoteSchema` - requires `title` (z.string().min(1).max(255)), `raw_notes` (z.string().min(1)), `meeting_date` (z.string().datetime()); optional `contact_id` (z.string().uuid().nullable()), `participants` (z.array(z.object({ name: z.string(), role: z.string().optional() })))
 - `updateMeetingNoteSchema` - partial of create, omits account_id
-- `meetingNoteQuerySchema` - pagination (page, limit, sort, order)
+- `meetingNoteQuerySchema` - pagination (page, limit, sort, order) matching the activity query schema pattern
 
 ## Frontend Architecture
 
@@ -166,9 +189,9 @@ Endpoints injected into baseApi:
 - `useUpdateMeetingNoteMutation()` - invalidates specific note tag
 - `useDeleteMeetingNoteMutation()` - invalidates MeetingNote tags
 - `useProcessMeetingNoteMutation()` - manual re-process, invalidates MeetingNote tags
-- `useGetMeetingNoteInsightsQuery(noteId)` - get processed insights
+- `useGetMeetingNoteInsightsQuery(noteId)` - get processed insights, provides `Insight` tags
 
-Add `'MeetingNote'` to `tagTypes` array in `baseApi.ts`.
+Add `'MeetingNote'` and `'Insight'` to `tagTypes` array in `baseApi.ts`.
 
 ### New components: packages/client/src/features/meetings/
 
@@ -217,15 +240,20 @@ Displays AI-extracted notes for a meeting note:
 Add listener:
 ```typescript
 socket.on('meeting-note:processed', ({ accountId }) => {
-  dispatch(baseApi.util.invalidateTags(['MeetingNote', { type: 'Health', id: accountId }]));
+  dispatch(baseApi.util.invalidateTags(['MeetingNote', 'Insight', { type: 'Health', id: accountId }]));
 });
 ```
+
+This invalidates both the meeting notes list (status updates to 'processed') and any expanded insights panels.
+
+## Health Score Integration
+
+The existing `calculateAndStoreHealth` in `health.service.ts` already uses AI sentiment analysis on activity titles. Meeting notes provide richer sentiment data. The processor triggers `healthQueue.add('calculateAccountHealth', { accountId })` after processing, which recalculates the health score. The existing sentiment scoring path (`provider.analyzeSentiment()`) will naturally pick up the most recent activity context. No changes to `health.service.ts` are needed for the initial implementation -- the health recalculation is triggered to refresh scores based on the new engagement signal (a meeting happened). In a future iteration, the health calculator could also pull from `processed_customer_notes` sentiment entries for more nuanced scoring.
 
 ## Files to Create
 
 1. `packages/server/src/core/database/migrations/010_create_meeting_notes.ts`
-2. `packages/server/src/core/queue/meetings-queue.ts`
-3. `packages/server/src/modules/meetings/meetings.routes.ts`
+2. `packages/server/src/modules/meetings/meetings.routes.ts`
 4. `packages/server/src/modules/meetings/meetings.service.ts`
 5. `packages/server/src/modules/meetings/meetings.queries.ts`
 6. `packages/server/src/modules/meetings/ai-notes-processor.ts`
@@ -238,9 +266,11 @@ socket.on('meeting-note:processed', ({ accountId }) => {
 
 ## Files to Modify
 
-1. `packages/server/src/app.ts` - register meeting note routes
-2. `packages/client/src/store/api/baseApi.ts` - add MeetingNote tag type
-3. `packages/client/src/features/accounts/AccountDetailPage.tsx` - add Meeting Notes tab
-4. `packages/client/src/hooks/useSocket.ts` - add meeting-note:processed listener
-5. `packages/shared/src/types/index.ts` - export new types
-6. `packages/shared/src/validation/index.ts` - export new schemas
+1. `packages/server/src/app.ts` - register meeting note routes (both account-scoped and standalone)
+2. `packages/server/src/core/queue/health-queue.ts` - add `meetingsQueue` export
+3. `packages/server/src/worker.ts` - import `meetingsQueue`, register `processMeetingNote` processor
+4. `packages/client/src/store/api/baseApi.ts` - add `MeetingNote` and `Insight` tag types
+5. `packages/client/src/features/accounts/AccountDetailPage.tsx` - add Meeting Notes tab at index 6 (existing tabs 0-5 remain unchanged)
+6. `packages/client/src/hooks/useSocket.ts` - add `meeting-note:processed` listener
+7. `packages/shared/src/types/index.ts` - export new types
+8. `packages/shared/src/validation/index.ts` - export new schemas
