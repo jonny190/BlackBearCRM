@@ -1,4 +1,4 @@
-# Getting Started with BlackPear CRM
+# Getting Started with Black Pear CRM
 
 This guide covers local development setup, default credentials, and a summary of what the application can do.
 

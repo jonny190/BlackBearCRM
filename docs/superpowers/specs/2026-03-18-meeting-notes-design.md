@@ -2,7 +2,7 @@
 
 ## Overview
 
-Add a meeting notes feature to BlackBear CRM that allows users to create meeting notes tied to accounts, have AI automatically process them into structured insights (action items, concerns, follow-ups, sentiment), and feed those insights into the existing account health scoring system.
+Add a meeting notes feature to Black Pear CRM that allows users to create meeting notes tied to accounts, have AI automatically process them into structured insights (action items, concerns, follow-ups, sentiment), and feed those insights into the existing account health scoring system.
 
 Meeting notes live as a new tab on the Account Detail page. AI processing happens asynchronously via a Bull queue using the existing configurable AI provider (Ollama, OpenAI, or Anthropic). Processing triggers automatically on save and can be manually re-triggered.
 

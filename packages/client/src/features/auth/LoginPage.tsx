@@ -22,7 +22,7 @@ export function LoginPage() {
     <Box display="flex" justifyContent="center" alignItems="center" minHeight="100vh" bgcolor="background.default">
       <Card sx={{ width: 400 }}>
         <CardContent>
-          <Typography variant="h5" mb={3}>BlackPear CRM</Typography>
+          <Typography variant="h5" mb={3}>Black Pear CRM</Typography>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           <form onSubmit={handleSubmit}>
             <TextField fullWidth label="Email" type="email" value={email}

@@ -42,7 +42,7 @@ router.post('/test', async (_req, res, next) => {
     if (!provider) {
       return sendSuccess(res, { success: false, message: 'AI provider not configured or disabled' });
     }
-    const result = await provider.generateText('Say "Hello from BlackPear CRM!" in exactly those words.');
+    const result = await provider.generateText('Say "Hello from Black Pear CRM!" in exactly those words.');
     sendSuccess(res, { success: true, message: result });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Connection failed';

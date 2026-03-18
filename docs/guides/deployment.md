@@ -1,6 +1,6 @@
-# Deploying BlackPear CRM
+# Deploying Black Pear CRM
 
-This guide covers deploying BlackPear CRM to a production environment using Coolify and Docker Compose.
+This guide covers deploying Black Pear CRM to a production environment using Coolify and Docker Compose.
 
 ## Architecture
 
@@ -22,7 +22,7 @@ Coolify handles building the images from your repository and managing the contai
 
 - Go to your Coolify dashboard
 - Create a new application from a Git repository
-- Select the BlackPear CRM repository
+- Select the Black Pear CRM repository
 - Set the build type to Docker Compose and point it at `docker-compose.yml`
 
 ### 2. Configure environment variables

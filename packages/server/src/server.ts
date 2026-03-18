@@ -40,7 +40,7 @@ async function start() {
   await subscribeToSocketEvents();
 
   httpServer.listen(config.PORT, () => {
-    logger.info({ port: config.PORT }, 'BlackBear CRM server started');
+    logger.info({ port: config.PORT }, 'Black Pear CRM server started');
   });
 
   // Graceful shutdown

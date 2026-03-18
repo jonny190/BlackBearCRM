@@ -16,7 +16,7 @@ export function Header({ onToggleSidebar }: HeaderProps) {
         <IconButton color="inherit" onClick={onToggleSidebar} edge="start" sx={{ mr: 2 }}>
           <MenuIcon />
         </IconButton>
-        <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>BlackPear CRM</Typography>
+        <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>Black Pear CRM</Typography>
         <Box display="flex" alignItems="center" gap={1}>
           <Typography variant="body2">{user?.first_name} {user?.last_name}</Typography>
           <AlertBell />

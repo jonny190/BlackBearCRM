@@ -42,7 +42,7 @@ function buildPrompt(type: string, account: Record<string, unknown>, contacts: R
   const healthInfo = health ? `Health score: ${health.overall_score}/100, Engagement: ${health.engagement_score}/100` : 'No health data available';
 
   const prompts: Record<string, string> = {
-    onboarding_90day: `You are a CRM analyst for BlackPear CRM. Generate a 90-day onboarding briefing for the following account. Include key relationship insights, suggested engagement cadence, and risk factors to watch.
+    onboarding_90day: `You are a CRM analyst for Black Pear CRM. Generate a 90-day onboarding briefing for the following account. Include key relationship insights, suggested engagement cadence, and risk factors to watch.
 
 Account: ${account.name}
 Industry: ${account.industry}
@@ -54,7 +54,7 @@ ${healthInfo}
 
 Provide actionable recommendations in a clear, concise format.`,
 
-    pre_meeting: `You are a CRM analyst for BlackPear CRM. Generate a pre-meeting briefing for the following account. Include relationship context, recent engagement history, health trends, and suggested talking points.
+    pre_meeting: `You are a CRM analyst for Black Pear CRM. Generate a pre-meeting briefing for the following account. Include relationship context, recent engagement history, health trends, and suggested talking points.
 
 Account: ${account.name}
 Industry: ${account.industry}
@@ -65,7 +65,7 @@ ${healthInfo}
 
 Keep it concise and actionable.`,
 
-    relationship_gap: `You are a CRM analyst for BlackPear CRM. Analyze the following account for relationship gaps and risks. Identify missing stakeholder coverage, communication gaps, and recommend actions.
+    relationship_gap: `You are a CRM analyst for Black Pear CRM. Analyze the following account for relationship gaps and risks. Identify missing stakeholder coverage, communication gaps, and recommend actions.
 
 Account: ${account.name}
 Industry: ${account.industry}
