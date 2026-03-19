@@ -4,7 +4,7 @@ COPY package.json package-lock.json ./
 COPY packages/shared/package.json packages/shared/
 COPY packages/server/package.json packages/server/
 COPY packages/client/package.json packages/client/
-RUN NODE_ENV=development npm ci && npm rebuild rollup
+RUN NODE_ENV=development npm ci && npm install @rollup/rollup-linux-x64-musl --no-save
 COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/client packages/client
