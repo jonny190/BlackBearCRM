@@ -37,14 +37,14 @@ export function MeetingNotesList({ notes, onAdd, onEdit, onDelete, onReprocess }
           const isExpanded = expandedId === note.id;
           return (
             <Box key={note.id}>
-              <ListItem divider sx={{ cursor: 'pointer' }} onClick={() => toggleExpand(note.id)}>
+              <ListItem divider sx={{ cursor: 'pointer', pr: 16 }} onClick={() => toggleExpand(note.id)}>
                 <ListItemText
                   primary={note.title}
                   secondary={new Date(note.meeting_date).toLocaleDateString(undefined, {
                     year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
                   })}
                 />
-                <Chip label={statusConfig.label} color={statusConfig.color} size="small" sx={{ mr: 1 }} />
+                <Chip label={statusConfig.label} color={statusConfig.color} size="small" sx={{ mr: 6 }} />
                 <ListItemSecondaryAction>
                   {(note.status === 'failed' || note.status === 'processing') && (
                     <IconButton size="small" onClick={(e) => { e.stopPropagation(); onReprocess(note.id); }} title="Retry processing">
