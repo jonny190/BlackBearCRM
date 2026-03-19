@@ -131,4 +131,28 @@ alertQueue.add(
   },
 );
 
+// ---------------------------------------------------------------------------
+// Startup recovery: re-queue meeting notes stuck in "processing"
+// ---------------------------------------------------------------------------
+
+async function recoverStuckMeetingNotes() {
+  const stuck: Array<{ id: string }> = await db('meeting_notes')
+    .where({ status: 'processing' })
+    .select('id');
+
+  if (stuck.length > 0) {
+    logger.info({ count: stuck.length }, 'Recovering stuck meeting notes');
+    for (const note of stuck) {
+      await meetingsQueue.add('processMeetingNote', { meetingNoteId: note.id }, {
+        attempts: 3,
+        backoff: { type: 'exponential', delay: 1000 },
+      });
+    }
+  }
+}
+
+recoverStuckMeetingNotes().catch((err) => {
+  logger.error({ err }, 'Failed to recover stuck meeting notes');
+});
+
 logger.info('Worker started and listening for jobs');

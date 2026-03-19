@@ -46,7 +46,7 @@ export function MeetingNotesList({ notes, onAdd, onEdit, onDelete, onReprocess }
                 />
                 <Chip label={statusConfig.label} color={statusConfig.color} size="small" sx={{ mr: 1 }} />
                 <ListItemSecondaryAction>
-                  {note.status === 'failed' && (
+                  {(note.status === 'failed' || note.status === 'processing') && (
                     <IconButton size="small" onClick={(e) => { e.stopPropagation(); onReprocess(note.id); }} title="Retry processing">
                       <Refresh fontSize="small" />
                     </IconButton>
