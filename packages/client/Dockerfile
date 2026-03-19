@@ -4,11 +4,12 @@ COPY package.json package-lock.json ./
 COPY packages/shared/package.json packages/shared/
 COPY packages/server/package.json packages/server/
 COPY packages/client/package.json packages/client/
-RUN NODE_ENV=development npm ci && npm install @rollup/rollup-linux-x64-musl --no-save
+RUN NODE_ENV=development npm ci
+RUN npm install @rollup/rollup-linux-x64-musl --no-save || true
 COPY tsconfig.base.json ./
 COPY packages/shared packages/shared
 COPY packages/client packages/client
-ARG CACHE_BUST=1
+ARG CACHE_BUST=2
 RUN echo "build: $CACHE_BUST" && cd packages/shared && npx tsc --project tsconfig.json && cd ../..
 RUN cd packages/client && npx vite build && cd ../..
 
