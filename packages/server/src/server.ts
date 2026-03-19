@@ -6,6 +6,9 @@ import { db } from './core/database/connection.js';
 import { logger } from './core/logger.js';
 import { config } from './core/config.js';
 
+// Register queue processors in the same process
+import { recoverStuckMeetingNotes } from './worker.js';
+
 async function seedAdmin() {
   if (!config.ADMIN_EMAIL || !config.ADMIN_PASSWORD) return;
   const existing = await db('users').where({ email: config.ADMIN_EMAIL }).first();
@@ -29,6 +32,9 @@ async function start() {
 
   // Seed admin user if configured and not yet created
   await seedAdmin();
+
+  // Recover any meeting notes stuck in "processing" from a prior crash
+  await recoverStuckMeetingNotes();
 
   const app = createApp();
   const httpServer = http.createServer(app);

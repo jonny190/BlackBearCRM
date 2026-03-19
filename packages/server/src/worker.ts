@@ -135,7 +135,7 @@ alertQueue.add(
 // Startup recovery: re-queue meeting notes stuck in "processing"
 // ---------------------------------------------------------------------------
 
-async function recoverStuckMeetingNotes() {
+export async function recoverStuckMeetingNotes() {
   const stuck: Array<{ id: string }> = await db('meeting_notes')
     .where({ status: 'processing' })
     .select('id');
@@ -151,8 +151,4 @@ async function recoverStuckMeetingNotes() {
   }
 }
 
-recoverStuckMeetingNotes().catch((err) => {
-  logger.error({ err }, 'Failed to recover stuck meeting notes');
-});
-
-logger.info('Worker started and listening for jobs');
+logger.info('Worker queue processors registered');
