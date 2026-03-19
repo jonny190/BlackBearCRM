@@ -41,9 +41,13 @@ export function MeetingNotesForm({ open, onClose, onSubmit, defaultValues, conta
     setValue('participants', participants.filter((_: unknown, i: number) => i !== index));
   };
 
+  const handleFormSubmit = (data: any) => {
+    onSubmit({ ...data, meeting_date: new Date(data.meeting_date).toISOString() });
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
         <DialogTitle>{defaultValues ? 'Edit Meeting Note' : 'New Meeting Note'}</DialogTitle>
         <DialogContent>
           <Controller name="title" control={control} render={({ field }) =>

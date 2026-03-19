@@ -6,7 +6,7 @@ export const createActivitySchema = z.object({
   type: z.enum(['meeting', 'email', 'call', 'note', 'proposal', 'follow_up']),
   title: z.string().min(1).max(255),
   description: z.string().nullable().optional(),
-  occurred_at: z.string().datetime(),
+  occurred_at: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }),
   metadata: z.record(z.unknown()).optional(),
 });
 

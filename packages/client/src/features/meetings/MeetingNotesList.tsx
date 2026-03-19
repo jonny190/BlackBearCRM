@@ -5,6 +5,7 @@ import { ProcessedInsights } from './ProcessedInsights';
 import type { MeetingNote, MeetingNoteStatus } from '@blackpear/shared';
 
 const STATUS_CONFIG: Record<MeetingNoteStatus, { label: string; color: 'default' | 'info' | 'success' | 'error' }> = {
+  draft: { label: 'Draft', color: 'default' },
   processing: { label: 'Processing', color: 'info' },
   processed: { label: 'Processed', color: 'success' },
   failed: { label: 'Failed', color: 'error' },

@@ -1,4 +1,4 @@
-export type MeetingNoteStatus = 'processing' | 'processed' | 'failed';
+export type MeetingNoteStatus = 'draft' | 'processing' | 'processed' | 'failed';
 
 export interface MeetingNote {
   id: string;
