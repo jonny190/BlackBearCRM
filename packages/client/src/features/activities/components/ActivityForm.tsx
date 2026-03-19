@@ -17,9 +17,13 @@ export function ActivityForm({ open, onClose, onSubmit, accountId, isLoading }: 
     defaultValues: { account_id: accountId, type: 'meeting', title: '', description: '', occurred_at: new Date().toISOString().slice(0, 16) },
   });
 
+  const handleFormSubmit = (data: any) => {
+    onSubmit({ ...data, occurred_at: new Date(data.occurred_at).toISOString() });
+  };
+
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(handleFormSubmit)}>
         <DialogTitle>Log Activity</DialogTitle>
         <DialogContent>
           <Controller name="type" control={control} render={({ field }) =>

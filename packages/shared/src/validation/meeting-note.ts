@@ -4,7 +4,7 @@ export const createMeetingNoteSchema = z.object({
   contact_id: z.string().uuid().nullable().optional(),
   title: z.string().min(1).max(255),
   raw_notes: z.string().min(1),
-  meeting_date: z.string().datetime(),
+  meeting_date: z.string().refine((val) => !isNaN(Date.parse(val)), { message: 'Invalid date' }),
   participants: z.array(z.object({
     name: z.string().min(1),
     role: z.string().optional(),
